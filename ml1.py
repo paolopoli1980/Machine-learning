@@ -18,7 +18,7 @@ deltaw=[0 for i in range(n)]
 
 def neuron(w,j):
     prob=random.uniform(0,1)
-    if prob>=0.5:
+    if w>=0.5:
         res[j]=2
     else:
         res[j]=1
@@ -30,10 +30,10 @@ def check_result():
             error+=1
     return error        
             
-niter=300000
+niter=5
 errorold=len(numbers)
-print check_result()
-print res
+print (check_result())
+print (res)
 
 for i in range(niter):
     for j in range(len(weights)):
@@ -67,9 +67,9 @@ for i in range(niter):
          
 
      
-print weights
-print resold
-print errorold
+print (weights)
+print (resold)
+print (errorold)
          
         
         
