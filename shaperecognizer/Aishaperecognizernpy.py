@@ -183,7 +183,7 @@ activfunc=np.zeros(numbneurons)
 maxsetmatfirst=2*np.sqrt(2)*np.sqrt(6/(nx*ny+numbneurons))
 maxsetmatsec=2*np.sqrt(2)*np.sqrt(6/(noutputs+numbneurons))
 typeofnn='elusoft'
-niterations=20
+niterations=80
 learningpar=0.01
 totcost=[0]
 print (inputs)
