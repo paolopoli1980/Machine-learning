@@ -261,14 +261,14 @@ def neuron(mat,numberofneurons,numberofinput,dx,dy,vball,vdotv,tipo,vballx,vball
         sumsofte=0
         for k in range(numbneuronsfirst,numberofneurons):
             sumsofte+=np.exp(valsofte[k-numbneuronsfirst])
-        var=0.6    
+        var=0.6
         for k in range(numbneuronsfirst,numberofneurons):
             valneur=np.exp(valsofte[k-numbneuronsfirst])/sumsofte
             #var=np.random.uniform()
             if valneur>var:
-                var=valneur
+                #var=valneur
                 movek=k
-        keymem.append(movek-numbneuronsfirst)
+                keymem.append(movek-numbneuronsfirst)
         
     if tipo=="lineheaviside":
         aix=[]
