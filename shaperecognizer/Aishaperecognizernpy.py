@@ -173,9 +173,9 @@ def matrix_scaling(nx,ny):
 ##################################################
 
 choice=input(" 1 - Training\n 2 - Trained\n ")
-nx=20
-ny=20
-numbneurons=50
+nx=32
+ny=32
+numbneurons=100
 noutputs=4
 inputs=np.zeros(nx*ny)
 outputs=np.zeros(noutputs)
@@ -183,9 +183,11 @@ activfunc=np.zeros(numbneurons)
 maxsetmatfirst=2*np.sqrt(2)*np.sqrt(6/(nx*ny+numbneurons))
 maxsetmatsec=2*np.sqrt(2)*np.sqrt(6/(noutputs+numbneurons))
 typeofnn='elusoft'
-niterations=80
+niterations=110
 learningpar=0.01
+tollerance=2.0
 totcost=[0]
+
 print (inputs)
 
 if choice=='1':
@@ -236,6 +238,9 @@ if choice=='1':
         matsecondweights-=learningpar*totsecgrad
         print ("the total cost is",totcost[0])
         print (totfirstgrad)
+        if totcost[0]<=tollerance:
+            break
+        
     for i in range(nx*ny):
         for j in range(numbneurons):
             f1.write(str(matfirstweights[i][j])+str(','))
@@ -285,5 +290,6 @@ if choice=='2':
     matrix_scaling(nx,ny)    
     trained_network(nx,ny,typeofnn,numbneurons,noutputs,outputs)        
     print (np.exp(outputs)/np.sum(np.exp(outputs)))        
-        
+
+#print (uni_matrix)        
         
