@@ -14,11 +14,13 @@ import matplotlib.pyplot as plt
 
 clock = pygame.time.Clock() 
 
-def neuron(mat,numberofneurons,numberofinput,dx,dy,vball,vdotv,tipo,vballx,vbally,updx,dwdx,upsx,dwsx,dsidexdx,dsideyup,dsidexsx,dsideydw,vtimesvdotv,numberofneurons_layer2,numbinputfirst,numbinputsec,numbneuronsfirst,numbneuronsecond):
+def neuron(mat,numberofneurons,numberofinput,dx,dy,vball,vdotv,tipo,vballx,vbally,updx,dwdx,upsx,dwsx,dsidexdx,dsideyup,dsidexsx,dsideydw,centerdist,vtimesvdotv,numberofneurons_layer2,numbinputfirst,numbinputsec,numbneuronsfirst,numbneuronsecond):
 
     v=[vballx,vbally,updx,dwdx,upsx,dwsx]
-#    v=[vtimesvdotv,vdotv,updx,dwdx,upsx,dwsx]
-   # v=[vballx,vbally,updx,dwdx,upsx,dwsx,dsidexdx,dsideyup,dsidexsx,dsideydw]
+    #v=[vtimesvdotv,vdotv,updx,dwdx,upsx,dwsx]
+   # v=[vballx,vbally,updx,dwdx,upsx,dwsx,centerdist]
+    
+    #v=[vballx,vbally,updx,dwdx,upsx,dwsx,dsidexdx,dsideyup,dsidexsx,dsideydw]
     module=np.sqrt(sum(i*i for i in v))
     v=[i/module for i in v]
 #    print (v)
@@ -261,7 +263,7 @@ def neuron(mat,numberofneurons,numberofinput,dx,dy,vball,vdotv,tipo,vballx,vball
         sumsofte=0
         for k in range(numbneuronsfirst,numberofneurons):
             sumsofte+=np.exp(valsofte[k-numbneuronsfirst])
-        var=0.8
+        var=0.75
         for k in range(numbneuronsfirst,numberofneurons):
             valneur=np.exp(valsofte[k-numbneuronsfirst])/sumsofte
             #var=np.random.uniform()
@@ -445,17 +447,17 @@ white = 255, 255, 255
 nballs=25
 #k=1
 
-nattemps=300 #######nattemps number of attemps you want to do########
-nreductionlim=30 #######any nreductionlimit attempted the random decreasing become half########
+nattemps=150 #######nattemps number of attemps you want to do########
+nreductionlim=50 #######any nreductionlimit attempted the random decreasing become half########
 starttinyincrement=2001 ######after this limit it start with a tiny incrememt#######
 timegradientcomparing=0
 matrixtimechanging=2001
-maxsetmat=1
+maxsetmat=10
 restart=2002
 switchuniformtogaussian=2001  ######after this number steps start the gaussian increment in case of total_method_variation#####
 standardev=0.125     #####deviation standard for the gaussian increment############
-numberofgeneticmatrix=6
-numberofaceptedgeneticmat=3
+numberofgeneticmatrix=4
+numberofaceptedgeneticmat=2
 #k=110
 timeclockold=0  #####the longest past time is memorized##########
 timeclock=0     #####the time of the n attemping is memorized#######
@@ -468,20 +470,20 @@ ball=[]
 r1=[]
 r2=[]
 #posball=([0,0])
-numberofneurons=5
-numberofneurons_layer2=4 #it has to be 4!!!!
+numberofneurons=3
+numberofneurons_layer2=4 #it has to be 4 in case of the single layer is on else it is 0!!!!
 numberofinput=6
 
-typeofincrement='doubledirection'
+typeofincrement=''
 weightold=[]
 cgx=[0]
 cgy=[0]
 add=[]
 np.random.seed() 
-limplayx=150      
-limplayy=120
-deltamin=-1#######minimal increment during the back propagation########
-deltamax=1######maximal increment during the back propagation########
+limplayx=180      
+limplayy=160
+deltamin=-0.1#######minimal increment during the back propagation########
+deltamax=0.1######maximal increment during the back propagation########
 memdeltamin=deltamin
 memdeltamax=deltamax
 tinydelta=0.00125  #######the tinydelta increment when it start tinydelta modality######
@@ -511,7 +513,8 @@ matweight=np.random.rand(numberofinput,numberofneurons)*maxsetmat-maxsetmat/2
 #matweight=np.random.rand(numberofinput,numberofneurons)
 
 #elusoftmax nosides
-
+'''
+[Elusoftmax hidden layer four neurons]
 matweight=[[ 5.34856863e+01, -5.24128522e+01,  7.08371023e+01, -3.41929613e+01,
    -4.50532234e+01,  3.08501902e+01,  2.35263955e+01, -1.10485454e+02,
    -9.73857159e+00],
@@ -532,14 +535,128 @@ matweight=[[ 5.34856863e+01, -5.24128522e+01,  7.08371023e+01, -3.41929613e+01,
     7.88420837e-01]]
 
 
+
+matweight=[[-14.58980297, -24.04309938,   5.53849418, -17.80602909,  -8.42141932,
+   -3.24913684,  10.40216906,  -3.59727236],
+ [ 10.51042359,  -3.56832696, -30.38040599, 10.61605403, -21.18851438,
+   12.98860993,   8.78632697,  23.73331051],
+ [ -1.29320148,  -1.92129111,   3.06979549,   0.65546965,  -2.37920229,
+    4.14222402,   8.11443802,  16.92479162],
+ [-14.0148265,   -4.05176534,  14.74471022,  -9.53353317, -18.25834379,
+   -2.36497642,  -7.27693648,   1.79170612],
+ [  3.75441862, -19.412406,    -3.4492203,   -4.93446537,  -7.65669514,
+   11.30217018,  27.17843471,  12.51225677],
+ [-10.64849338,   4.65678499,  23.52703653,  11.29205734,  25.85236905,
+    0.22425672+10,  -3.13792134,  -6.00410148]]
+
+[[ 0.64761962 -3.20072042 -3.5837733   2.65868994 -2.64349189  0.17800418
+   2.67132602 -4.55847397]
+ [-2.77733812 -1.41828906 -4.44315558 -2.91116693  0.94225973 -2.30260472
+   0.09206093 -1.12760442]
+ [ 2.48716317 -4.37026032 -0.57109528  4.2294066   3.74334977 -1.00684843
+  -2.92962425  3.67470599]
+ [-4.04493935 -3.14064909  4.57762271 -3.31578502  3.49777968 -1.93249113
+   4.27151112  4.48670301]
+ [ 4.56898534  1.53849651 -3.54418593  2.19440892 -1.8993946  -0.46252033
+   3.40305223  3.66824954]
+ [ 3.83726478 -1.50222531 -1.36324965 -3.08230469  4.32021526 -3.6092124
+   2.97922564  3.50959319]]
+
+[[-5.81803650e+00  6.51508414e+00 -5.96675534e+00 -6.62313176e-01
+  -2.02767939e+01  8.12323548e+00  5.12238499e+00  1.25528293e+01]
+ [ 3.27908362e+00 -1.41877469e-04  1.14262767e+01 -8.16447685e+00
+  -1.04999490e+01 -1.17084864e+01 -1.16118025e+01  1.74784539e+01]
+ [-1.15886685e+01 -2.47276639e+01 -7.99538710e+00 -2.63404913e+00
+   1.99669519e+00 -4.98084665e+00 -7.54816271e-01 -2.95445439e+01]
+ [-1.20822131e+01  1.46441437e+01  2.56146204e+01 -2.59141373e+01
+  -2.35770006e+00  4.36164149e+00 -2.91432508e+00 -1.01456918e+00]
+ [-1.01044415e+00  7.83456302e-03 -1.64957372e+01  1.09388629e+01
+  -7.23353132e+00  6.29042940e-01 -2.19868673e+00 -1.18607072e+01]
+ [ 4.78482485e-01  5.88773458e-01  3.09294080e+00 -1.15621375e+01
+  -1.86912222e+00 -1.40097370e+01 -1.14799391e+01  1.27173520e+01]]
+The best
+
+
+matweight=[[ 17.52840776,  15.17287966,  -3.36803196, -13.52139702,  12.82434282,
+    1.77908684,   7.79677081,  21.27364315],
+ [ -9.27409486,   4.11667832,   0.44799216, -10.13097644,  26.53334651,
+  -10.32943725,  -9.50137782,  12.77250735],
+ [ -6.14747663,  18.61528189,  12.30682136, -24.2607244,  -37.56226349,
+   -2.53922494,  -4.44259917, -12.60282504],
+ [  1.55920097,  20.38182851, -14.65379246, -11.00220405,  -9.20604766,
+  -18.38426479,  13.81815195, -31.91711274],
+ [  5.32860692,  -9.83658591,  19.12701698,  37.09987979,  10.5038393,
+  -25.00040808, -12.40064444,  27.18197154],
+ [ -9.33568958,  -7.07912103, -24.52121861,  26.11545583, -34.48158781,
+  -10.79170571,  -4.81773755,  34.48190323]]
+
+best 60 minutes human 1935
+The best NN performance with four neurons is 864
+speed=[[3, -4], [-5, 4], [1, 2], [3, 0], [1, 1], [5, -5], [-3, 0], [-2, 3], [-2, 4], [0, -2], [-4, -2], [0, -4], [0, 1], [-2, -2], [3, 2], [0, -3], [0, -1], [3, 5], [1, -5], [2, 5], [-1, -3], [4, 4], [2, 0], [-3, 1], [5, 4]]
+detection=80
+
+
+#Three neurons eulusoftmax
+
+
+
+matweight=[[  3.82541289,  -0.91615453,  15.01991577, -15.79849793,  -6.253534,
+  -12.85658343,   7.95297352],
+ [ -3.39752777,  22.95549996,   3.78177323, -12.08068028,   3.41379568,
+   -0.84374576, -33.68244375],
+ [  4.14835297,   7.69352664,  17.39080592,  10.47021964, -13.63312496,
+   -9.82371318,  17.18277283],
+ [ 12.7826494,   11.56721962, -19.50346206,   1.83919545, -13.63778793,
+  -17.30308803,  -9.53689592],
+ [  7.97970289, -21.09745331, -13.5950587,    8.50981584,   8.12590946,
+   22.25485562,  -1.75837199],
+ [ 11.53824609,  12.19868371 , -0.66144914,  13.40997005,  33.70918401,
+   13.33052536, -22.86591942]]
+
+
+matweight=[[  2.81170383,  -1.08831759,  14.19762729, -15.62325548,  -7.04311562,
+  -14.06285617,   8.46614362],
+ [ -4.39660497,  21.416,   2.2837, -12.657,   3.227,
+   -0.677, -32.38],
+ [  2.233,   7.936,  16.619,  11.84, -12.806,
+   -7.76,  18.298],
+ [ 12.79,   12.144, -17.52,   3.047, -13.349,
+  -17.35,  -8.71],
+ [  6.465, -22.15, -15.05,    9.612,   8.615,
+   22.181,  -1.422],
+ [ 9.83,  13.123 , -1.122,  14.54,  33.60,
+   11.32, -21.98]]
+
+'''
+
+#best1353
+epsilon=0.04
+epsilon2=.025
+
+matweight=[[ 3.57970841e+00+epsilon, -5.22180230e-03-epsilon,  1.46722253e+01-epsilon, -1.38748415e+01-epsilon,
+  -5.65596058e+00-epsilon, -1.37475428e+01,  1.04101271e+01],
+ [-4.51020965e+00-epsilon,  2.19907985e+01,  4.73311501e+00, -1.44663738e+01,
+   4.79250678e+00, -1.88984513e+00, -3.41546983e+01],
+ [ 1.56706408e-01,  6.06701849e+00,  1.57791652e+01,  8.82514081e+00,
+  -1.38335626e+01, -5.43752242e+00,  1.75429017e+01],
+ [ 1.38158341e+01,  1.25558214e+01, -1.57149073e+01,  1.69403113e+00,
+  -1.45154178e+01, -1.56861715e+01, -7.09385951e+00],
+ [ 4.17339850e+00, -1.93338221e+01, -1.53945587e+01,  8.94950708e+00,
+   9.72758512e+00,  2.05680924e+01, -4.26377257e-01],
+ [ 1.12761032e+01,  1.14531257e+01,  4.25591085e-01+epsilon,  1.45677532e+01,
+   3.33358155e+01,  1.22274711e+01, -2.13544794e+01]]
+matinc=np.random.rand(numberofinput,numberofneurons)*deltamax-deltamax/2
+matweight+=matinc
+
+print (matweight)            
 matweightold=matweight.copy()
 add=np.zeros(s)
 timegradientmatrix=np.zeros(s)
 timegradientmatrixnew=np.zeros(s)
 memi=0
 memj=0
-checktime=1 #3 for gradient ####tipology of time checking the number 2 it considers separated times, 4 for genetic###### 
-geneticalgo='off'  #####on case the genetic algorithm is on#######
+checktime=4 #3 for gradient ####tipology of time checking the number 2 it considers separated times, 4 for genetic###### 
+geneticalgo='on'  #####on case the genetic algorithm is on#######
 geneticmat=np.random.rand(numberofgeneticmatrix,numberofinput,numberofneurons)*maxsetmat-maxsetmat/2
 ###only in case of a matrix calculated before
 for i in range(numberofgeneticmatrix):
@@ -638,14 +755,14 @@ for v in range(nattemps):
                         
                         add[i][j]=np.random.uniform(deltamin,deltamax)
                         
-                        print (add)
+                       # print (add)
                         print ("action add")
                     elif v%2!=0 and v>1:
                         print("signadd")
                         add[i][j]=-add[i][j]
-                        print (matweightold)
+                        #print (matweightold)
                         
-                        print(add)
+                        #print(add)
 
                 else:
                     if (v%2==0 and v>1):
@@ -671,8 +788,8 @@ for v in range(nattemps):
             
 
 
-    matweight=total_variational_method(matweight)
-    print (matweight)
+    #matweight=total_variational_method(matweight)
+    #print (matweight)
     #print(matweightold)
 
    # single_ordered_variational_method(memi,memj)
@@ -828,12 +945,13 @@ for v in range(nattemps):
                     dwsx=kset/np.sqrt(dx**2+dy**2)
                 if dx<0 and dy<0:
                     upsx=kset/np.sqrt(dx**2+dy**2)
-                    
+            #kset=0.1      
             dsidexsx=kset/(playerrect.x+playerrect.width/2-(width/2-limplayx))
             dsideyup=kset/(playerrect.y+playerrect.height/2-(height/2-limplayy))
             dsidexdx=kset/(width/2+limplayx-(playerrect.x+playerrect.width/2))
             dsideydw=kset/(height/2+limplayy-(playerrect.y+playerrect.height/2))
-            
+            kset=0.01
+            centerdist=kset*np.sqrt((playerrect.x-width/2)**2+(playerrect.y-height/2)**2)
             vtimesvdotv=np.sqrt(vballx**2+vbally**2)*vdotv            
             
 #####here you choose which neural network or classic algorithm to use############            
@@ -849,7 +967,7 @@ for v in range(nattemps):
             #tipo='linesoft'
            # tipo='elusoft'
             tipo='elusoftmax'
-           # tipo='lineheaviside'
+            #tipo='lineheaviside'
           #  tipo="eluheaviside"
            # tipo='elusoftlim'
 
@@ -873,7 +991,7 @@ for v in range(nattemps):
                 if playerrect.y+playerrect.height > height/2+limplayy:
                     playerrect.y=height/2+limplayy-playerrect.height                
 
-            for el in neuron(matweight,numberofneurons,numberofinput,invdx,invdy,vball,vdotv,tipo,vballx,vbally,updx,dwdx,upsx,dwsx,dsidexdx,dsideyup,dsidexsx,dsideydw,vtimesvdotv,numberofneurons_layer2,numbinputfirst,numbinputsec,numbneuronsfirst,numbneuronsecond):
+            for el in neuron(matweight,numberofneurons,numberofinput,invdx,invdy,vball,vdotv,tipo,vballx,vbally,updx,dwdx,upsx,dwsx,dsidexdx,dsideyup,dsidexsx,dsideydw,centerdist,vtimesvdotv,numberofneurons_layer2,numbinputfirst,numbinputsec,numbneuronsfirst,numbneuronsecond):
 
                 if el==0:
                     playerrect.x-=1
